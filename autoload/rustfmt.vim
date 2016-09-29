@@ -20,17 +20,17 @@ endif
 
 let s:got_fmt_error = 0
 
-function! rustfmt#Format()
+function! rustfmt#Format(line1, line2)
   let l:curw = winsaveview()
   let l:tmpname = expand("%:p:h") . "/." . expand("%:p:t") . ".rustfmt"
   call writefile(getline(1, '$'), l:tmpname)
 
-  let command = g:rustfmt_command . " --write-mode=overwrite "
+  let command = printf("%s %s --write-mode=overwrite --file-jsons '[{\"file\": %s, \"range\": [%d, %d]}]'", g:rustfmt_command, g:rustfmt_options, l:tmpname, a:line1, a:line2)
 
   if exists("*systemlist")
-    let out = systemlist(command . g:rustfmt_options . " " . shellescape(l:tmpname))
+    let out = systemlist(command)
   else
-    let out = split(system(command . g:rustfmt_options . " " . shellescape(l:tmpname)), '\r\?\n')
+    let out = split(system(command), '\r\?\n')
   endif
 
   if v:shell_error == 0 || v:shell_error == 3

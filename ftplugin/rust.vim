@@ -138,7 +138,7 @@ command! -nargs=* -buffer RustEmitAsm call rust#Emit("asm", <q-args>)
 command! -range=% RustPlay :call rust#Play(<count>, <line1>, <line2>, <f-args>)
 
 " See |:RustFmt| for docs
-command! -buffer RustFmt call rustfmt#Format()
+command! -range=% -buffer RustFmt call rustfmt#Format(<line1>, <line2>)
 
 " Mappings {{{1
 
